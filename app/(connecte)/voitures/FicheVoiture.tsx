@@ -21,6 +21,8 @@ type Props = {
   laveeAujourdhui: boolean;
   aMoi: boolean;
   secretariat: boolean;
+  // true sur la page de la fiche elle-même : pas de lien vers elle
+  surSaFiche?: boolean;
 };
 
 const ETIQUETTES: Record<Etat, string> = {
@@ -107,9 +109,11 @@ export default function FicheVoiture(p: Props) {
                     Mettre indisponible
                   </button>
                 )}
-            <Link href={`/voitures/${p.id}`} className="bouton bouton-petit bouton-secondaire">
-              Modifier la fiche
-            </Link>
+            {!p.surSaFiche && (
+              <Link href={`/voitures/${p.id}`} className="bouton bouton-petit bouton-secondaire">
+                Fiche et entretiens
+              </Link>
+            )}
           </div>
         )}
       </form>

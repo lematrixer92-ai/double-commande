@@ -56,16 +56,6 @@ export async function chargerFlotte() {
   };
 }
 
-export async function chargerVoiture(id: string): Promise<Voiture | null> {
-  const supabase = await creerClientServeur();
-  const { data } = await supabase
-    .from("voitures")
-    .select(COLONNES_VOITURE)
-    .eq("id", id)
-    .maybeSingle();
-  return (data as Voiture | null) ?? null;
-}
-
 // --- Dates et heures, toujours à l'heure de Paris ----------------------
 
 const FUSEAU = "Europe/Paris";
@@ -76,7 +66,7 @@ export function aujourdhui(): string {
 }
 
 // Nombre de jours entre deux dates « AAAA-MM-JJ ».
-function joursEntre(debut: string, fin: string): number {
+export function joursEntre(debut: string, fin: string): number {
   return Math.round((Date.parse(fin) - Date.parse(debut)) / 86_400_000);
 }
 
@@ -101,6 +91,35 @@ export function depuisQuand(instant: string | null): string {
   return `depuis le ${jourCourt} à ${heure}`;
 }
 
+// « 2026-11-12 » -> « 12/11/2026 ».
+export function dateCourte(date: string): string {
+  const [annee, mois, jour] = date.split("-");
+  return `${jour}/${mois}/${annee}`;
+}
+
+// Les alertes de dates s'affichent 30 jours avant l'échéance.
+export const JOURS_ALERTE = 30;
+
+// Une échéance (contrôle technique, assurance, entretien), en une phrase :
+// « le 12/11/2026 (dans 18 jours) », « dépassée depuis 3 jours (le 21/10/2026) ».
+export type NiveauEcheance = "vide" | "ok" | "bientot" | "depassee";
+
+export function echeance(date: string | null): { texte: string; niveau: NiveauEcheance } {
+  if (!date) return { texte: "pas encore renseignée", niveau: "vide" };
+  const jours = joursEntre(aujourdhui(), date);
+  const quand = dateCourte(date);
+  if (jours < 0) {
+    const n = -jours;
+    return { texte: `dépassée depuis ${n} jour${n > 1 ? "s" : ""} (le ${quand})`, niveau: "depassee" };
+  }
+  if (jours === 0) return { texte: `aujourd'hui (le ${quand})`, niveau: "bientot" };
+  const dans = jours === 1 ? "demain" : `dans ${jours} jours`;
+  return {
+    texte: `le ${quand} (${dans})`,
+    niveau: jours <= JOURS_ALERTE ? "bientot" : "ok",
+  };
+}
+
 // L'état du lavage, en une phrase.
 export function etatLavage(dernierLavage: string | null): { texte: string; aFaire: boolean } {
   if (!dernierLavage) return { texte: "Lavage : jamais noté", aFaire: true };
@@ -119,4 +138,12 @@ export function etatVoiture(v: Voiture): Etat {
   if (v.pris_par) return "en_lecon";
   if (v.a_verifier) return "a_verifier";
   return "libre";
+}
+
+// « avec Karim depuis 14h05 », la raison d'une indisponibilité...
+export function phraseEtat(v: Voiture, prenom: (id: string | null) => string): string {
+  if (v.indisponible) return v.raison_indisponible ?? "";
+  if (v.pris_par) return `avec ${prenom(v.pris_par)} ${depuisQuand(v.pris_depuis)}`;
+  if (v.a_verifier) return "un problème a été signalé";
+  return "";
 }

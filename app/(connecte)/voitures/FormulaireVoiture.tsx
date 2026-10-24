@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState, useState } from "react";
+import { useActionState, useEffect, useState } from "react";
 import MessageFormulaire from "@/components/MessageFormulaire";
 import type { Voiture } from "@/lib/flotte";
 import { enregistrerVoiture, supprimerVoiture } from "./actions";
@@ -13,7 +13,7 @@ export default function FormulaireVoiture({ voiture }: { voiture?: Voiture }) {
   const [confirmer, setConfirmer] = useState(false);
 
   // Les champs sont gardés ici pour ne pas être vidés après un refus.
-  const [champs, setChamps] = useState({
+  const valeurs = {
     modele: voiture?.modele ?? "",
     immatriculation: voiture?.immatriculation ?? "",
     boite: voiture?.boite ?? "manuelle",
@@ -21,7 +21,15 @@ export default function FormulaireVoiture({ voiture }: { voiture?: Voiture }) {
     fin_assurance: voiture?.fin_assurance ?? "",
     prochain_entretien: voiture?.prochain_entretien ?? "",
     dernier_lavage: voiture?.dernier_lavage ?? "",
-  });
+  };
+  const [champs, setChamps] = useState(valeurs);
+
+  // Si la fiche change ailleurs (lavage, entretien ajouté...), on repart des
+  // nouvelles valeurs : « Enregistrer » ne doit pas remettre les anciennes.
+  const cle = Object.values(valeurs).join("|");
+  useEffect(() => {
+    setChamps(valeurs);
+  }, [cle]);
 
   const champ = (nom: keyof typeof champs) => ({
     name: nom,
