@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120" role="img" aria-label="Double Commande">
+<rect x="18" y="22" width="38" height="76" rx="13" fill="#14213D"/>
+<rect x="64" y="22" width="38" height="76" rx="13" fill="#F5A524"/>
+<path d="M28 44h18M28 56h18M28 68h18" stroke="#F6F7FA" stroke-width="4" stroke-linecap="round"/>
+<path d="M74 44h18M74 56h18M74 68h18" stroke="#14213D" stroke-width="4" stroke-linecap="round"/>
+</svg>

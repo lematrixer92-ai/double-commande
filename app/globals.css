@@ -1,0 +1,174 @@
+/*
+  Couleurs de Double Commande.
+  Elles sont définies UNE seule fois ici. Les composants utilisent
+  toujours var(--nom-de-la-couleur), jamais un code couleur en dur.
+*/
+:root {
+  /* Couleurs de la marque */
+  --bleu-marine: #14213d;
+  --orange: #f5a524;
+  --rouge: #d62839; /* réservé aux erreurs et aux voitures indisponibles */
+  --blanc: #ffffff;
+
+  /* Mode clair */
+  --fond: #f6f7fa;
+  --surface: var(--blanc);
+  --texte: var(--bleu-marine);
+  --texte-secondaire: #4a5468;
+  --bordure: #dfe3ec;
+  --principale: var(--bleu-marine);
+  --sur-principale: var(--blanc);
+  --accent: var(--orange);
+  --sur-accent: var(--bleu-marine);
+  --erreur: var(--rouge);
+
+  /* Logo : pédale de gauche et ses traits */
+  --logo-pedale-gauche: var(--bleu-marine);
+  --logo-traits-gauche: var(--fond);
+
+  /* Tailles */
+  --rayon: 16px;
+  --hauteur-bouton: 56px; /* gros boutons faciles à toucher */
+
+  color-scheme: light dark;
+}
+
+/* Mode sombre : suit automatiquement le réglage du téléphone */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --fond: #0b1222;
+    --surface: #17213a;
+    --texte: #f6f7fa;
+    --texte-secondaire: #aab3c5;
+    --bordure: #2a3654;
+    --principale: var(--orange);
+    --sur-principale: var(--bleu-marine);
+    --erreur: #ff5c6c;
+
+    --logo-pedale-gauche: #f6f7fa;
+    --logo-traits-gauche: var(--bleu-marine);
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--fond);
+  color: var(--texte);
+  font-family: var(--police-sora), system-ui, sans-serif;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100dvh;
+}
+
+.page {
+  min-height: 100dvh;
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 48px 20px 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 24px;
+}
+
+.marque {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.nom {
+  margin: 0;
+  font-size: 2.25rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  color: var(--texte);
+}
+
+.accroche {
+  margin: 0;
+  font-size: 1.05rem;
+  color: var(--texte-secondaire);
+}
+
+.carte {
+  width: 100%;
+  background: var(--surface);
+  border: 1px solid var(--bordure);
+  border-radius: var(--rayon);
+  padding: 20px;
+  text-align: left;
+}
+
+.carte h2 {
+  margin: 0 0 8px;
+  font-size: 1.1rem;
+}
+
+.carte p {
+  margin: 0;
+  color: var(--texte-secondaire);
+}
+
+.liste {
+  margin: 12px 0 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 10px;
+}
+
+.liste li {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.pastille {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  flex: none;
+}
+
+.pastille-libre { background: var(--texte); }
+.pastille-accent { background: var(--accent); }
+.pastille-erreur { background: var(--erreur); }
+
+.bouton {
+  width: 100%;
+  min-height: var(--hauteur-bouton);
+  border: none;
+  border-radius: var(--rayon);
+  font: inherit;
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  background: var(--principale);
+  color: var(--sur-principale);
+}
+
+.bouton:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.pied {
+  margin-top: auto;
+  font-size: 0.85rem;
+  color: var(--texte-secondaire);
+}
