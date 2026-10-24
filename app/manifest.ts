@@ -1,14 +1,17 @@
 import type { MetadataRoute } from "next";
 
 // Le manifeste dit au téléphone comment afficher l'appli une fois installée.
-// L'installation complète et les notifications arrivent à l'étape 7.
+// Avec le service worker (public/sw.js), il permet d'installer l'appli
+// sur l'écran d'accueil et de recevoir les notifications.
 export default function manifest(): MetadataRoute.Manifest {
   return {
     name: "Double Commande",
     short_name: "Double Commande",
     description: "La flotte de l'auto-école, sans oubli",
     lang: "fr",
-    start_url: "/",
+    id: "/",
+    start_url: "/accueil",
+    scope: "/",
     display: "standalone",
     background_color: "#F6F7FA",
     theme_color: "#14213D",

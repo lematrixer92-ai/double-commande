@@ -2,9 +2,11 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { after } from "next/server";
 import { erreurDeLaBase, type EtatFormulaire } from "@/lib/erreurs";
 import { aujourdhui } from "@/lib/flotte";
-import { maPersonne } from "@/lib/session";
+import { notifier, raccourcir, secretariatDe } from "@/lib/notifications";
+import { maPersonne, type Personne } from "@/lib/session";
 import { creerClientServeur } from "@/lib/supabase/serveur";
 
 /*
@@ -43,11 +45,34 @@ const ACTIONS_VOITURE = {
 
 type ActionVoiture = keyof typeof ACTIONS_VOITURE;
 
+type VoitureAvant = { modele: string; immatriculation: string; plein_a_faire: boolean };
+
+// Notification au secrétariat : problème signalé ou plein à faire.
+async function prevenirSecretariat(
+  moi: Personne,
+  nom: "probleme" | "plein",
+  id: string,
+  voiture: VoitureAvant,
+  texte: string | null,
+) {
+  const laVoiture = `${voiture.modele} (${voiture.immatriculation})`;
+  await notifier(await secretariatDe(moi.autoEcoleId, moi.id), {
+    titre: nom === "probleme" ? `Problème signalé : ${laVoiture}` : `Plein à faire : ${laVoiture}`,
+    texte:
+      nom === "probleme"
+        ? `${moi.prenom} : ${texte ? raccourcir(texte) : "la voiture est à vérifier."}`
+        : `Demandé par ${moi.prenom}.`,
+    url: `/voitures/${id}`,
+    tag: `${nom}-${id}`,
+  });
+}
+
 export async function actionVoiture(
   _etat: EtatFormulaire,
   formulaire: FormData,
 ): Promise<EtatFormulaire> {
-  if (!(await maPersonne())) return { erreur: PAS_CONNECTE };
+  const moi = await maPersonne();
+  if (!moi) return { erreur: PAS_CONNECTE };
 
   const id = String(formulaire.get("id") ?? "");
   const nom = String(formulaire.get("action") ?? "") as ActionVoiture;
@@ -63,8 +88,23 @@ export async function actionVoiture(
         : { p_voiture: id };
 
   const supabase = await creerClientServeur();
+  // Pour prévenir le secrétariat, on lit la voiture avant le changement.
+  const prevenir = nom === "probleme" || nom === "plein" ? nom : null;
+  const { data: avant } = prevenir
+    ? await supabase
+        .from("voitures")
+        .select("modele, immatriculation, plein_a_faire")
+        .eq("id", id)
+        .maybeSingle<VoitureAvant>()
+    : { data: null };
+
   const { error } = await supabase.rpc(action.fonction, parametres);
   if (error) return { erreur: erreurDeLaBase(error) };
+
+  // Un plein déjà demandé n'est pas annoncé deux fois.
+  if (prevenir && avant && !(prevenir === "plein" && avant.plein_a_faire)) {
+    after(() => prevenirSecretariat(moi, prevenir, id, avant, texte));
+  }
 
   rafraichir();
   return { succes: action.succes };

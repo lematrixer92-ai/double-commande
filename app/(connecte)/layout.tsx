@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { seDeconnecter } from "@/app/actions";
+import BoutonDeconnexion from "@/components/BoutonDeconnexion";
+import EnregistrementAppli from "@/components/EnregistrementAppli";
 import LienMessages from "@/components/LienMessages";
 import Logo from "@/components/Logo";
 import { chargerNonLus } from "@/lib/conversations";
@@ -25,14 +26,11 @@ export default async function LayoutConnecte({
         </Link>
         <div className="entete-droite">
           <LienMessages nonLusAuDepart={nonLus} />
-          <form action={seDeconnecter}>
-            <button className="lien-bouton" type="submit">
-              Se déconnecter
-            </button>
-          </form>
+          <BoutonDeconnexion />
         </div>
       </header>
       <main className="page page-connectee">{children}</main>
+      <EnregistrementAppli />
     </>
   );
 }

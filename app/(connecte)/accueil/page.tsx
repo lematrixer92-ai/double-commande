@@ -74,6 +74,11 @@ export default async function PageAccueil() {
           </p>
         </Link>
 
+        <Link href="/notifications" className="carte carte-lien">
+          <h2>Installer et notifications</h2>
+          <p>Mettre l&apos;appli sur ton écran d&apos;accueil et recevoir les alertes.</p>
+        </Link>
+
         {secretariat && (
           <Link href="/moniteurs" className="carte carte-lien">
             <h2>Les moniteurs</h2>
@@ -93,7 +98,7 @@ export default async function PageAccueil() {
         Changer mon mot de passe
       </Link>
 
-      <p className="pied">Étape 6 sur 9 : le mini chat.</p>
+      <p className="pied">Étape 7 sur 9 : l&apos;appli installée et les notifications.</p>
     </>
   );
 }
