@@ -3,6 +3,7 @@ import Link from "next/link";
 import PageLarge from "@/components/PageLarge";
 import Plaque from "@/components/Plaque";
 import { compterAFaire } from "@/lib/a-faire";
+import { chargerNonLus } from "@/lib/conversations";
 import { chargerFlotte, depuisQuand } from "@/lib/flotte";
 import { exigerPersonne } from "@/lib/session";
 
@@ -11,10 +12,12 @@ export const metadata: Metadata = { title: "Accueil · Double Commande" };
 export default async function PageAccueil() {
   const moi = await exigerPersonne();
   const secretariat = moi.role === "secretariat";
-  const [{ voitures, cartes }, aFaire] = await Promise.all([
+  const [{ voitures, cartes }, aFaire, nonLusParConversation] = await Promise.all([
     chargerFlotte(),
     secretariat ? compterAFaire() : 0,
+    chargerNonLus(),
   ]);
+  const nonLus = [...nonLusParConversation.values()].reduce((a, b) => a + b, 0);
   const maVoiture = voitures.find((v) => v.pris_par === moi.id);
   const maCarte = cartes.find((c) => c.pris_par === moi.id);
   const libres = voitures.filter((v) => !v.pris_par && !v.indisponible).length;
@@ -60,6 +63,17 @@ export default async function PageAccueil() {
           {!secretariat && maCarte && <p>Tu as la {maCarte.nom.toLowerCase()}.</p>}
         </Link>
 
+        <Link href="/messages" className={`carte carte-lien ${nonLus > 0 ? "carte-alerte" : ""}`}>
+          <h2>Messages</h2>
+          <p>
+            {nonLus > 0
+              ? `${nonLus} nouveau${nonLus > 1 ? "x" : ""} message${nonLus > 1 ? "s" : ""}.`
+              : secretariat
+                ? "Le mini chat avec les moniteurs."
+                : "Le mini chat avec le secrétariat."}
+          </p>
+        </Link>
+
         {secretariat && (
           <Link href="/moniteurs" className="carte carte-lien">
             <h2>Les moniteurs</h2>
@@ -79,7 +93,7 @@ export default async function PageAccueil() {
         Changer mon mot de passe
       </Link>
 
-      <p className="pied">Étape 5 sur 9 : la vue secrétariat.</p>
+      <p className="pied">Étape 6 sur 9 : le mini chat.</p>
     </>
   );
 }
