@@ -1,4 +1,4 @@
-import { creerClientSupabase, supabaseConfigure } from "@/lib/supabase";
+import { creerClientSupabase, supabaseConfigure } from "@/lib/supabase/public";
 
 // Petit voyant qui dit si le site arrive à parler à la base de données.
 export default async function EtatBase() {

@@ -1,10 +1,17 @@
+import Link from "next/link";
+import { redirect } from "next/navigation";
 import EtatBase from "@/components/EtatBase";
 import Logo from "@/components/Logo";
+import { utilisateurConnecte } from "@/lib/session";
+import { supabaseConfigure } from "@/lib/supabase/config";
 
 // La page est recalculée à chaque visite pour que le voyant soit à jour.
 export const dynamic = "force-dynamic";
 
-export default function Accueil() {
+export default async function Accueil() {
+  // Déjà connecté : on va directement dans l'appli.
+  if (supabaseConfigure && (await utilisateurConnecte())) redirect("/accueil");
+
   return (
     <main className="page">
       <div className="marque">
@@ -32,13 +39,13 @@ export default function Accueil() {
         </ul>
       </section>
 
-      <button className="bouton" type="button" disabled>
-        Se connecter (bientôt)
-      </button>
+      <Link className="bouton" href="/connexion">
+        Se connecter
+      </Link>
 
       <EtatBase />
 
-      <p className="pied">Étape 2 sur 9 : la base de données.</p>
+      <p className="pied">Étape 3 sur 9 : la connexion et les rôles.</p>
     </main>
   );
 }
