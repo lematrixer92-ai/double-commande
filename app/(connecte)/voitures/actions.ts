@@ -89,6 +89,57 @@ export async function actionCarte(
   return { succes: prendre ? "C'est noté : tu as la carte." : "C'est noté : la carte est rendue." };
 }
 
+// --- Cartes du parking (secrétariat) -----------------------------------
+// Facultatives : une auto-école peut n'en avoir aucune.
+
+export async function ajouterCarte(
+  _etat: EtatFormulaire,
+  formulaire: FormData,
+): Promise<EtatFormulaire> {
+  const moi = await maPersonne();
+  if (moi?.role !== "secretariat") {
+    return { erreur: "Impossible : seul le secrétariat peut ajouter une carte." };
+  }
+  const nom = String(formulaire.get("nom") ?? "").trim();
+  if (!nom) return { erreur: "Impossible : donne un nom à la carte (ex. : Carte blanche 1)." };
+
+  const supabase = await creerClientServeur();
+  const { error } = await supabase.from("cartes").insert({ nom });
+  if (error) {
+    if (error.code === "23505") return { erreur: "Impossible : une carte porte déjà ce nom." };
+    return { erreur: erreurDeLaBase(error) };
+  }
+
+  rafraichir();
+  return { succes: `La carte « ${nom} » est ajoutée.` };
+}
+
+export async function supprimerCarte(
+  _etat: EtatFormulaire,
+  formulaire: FormData,
+): Promise<EtatFormulaire> {
+  const moi = await maPersonne();
+  if (moi?.role !== "secretariat") {
+    return { erreur: "Impossible : seul le secrétariat peut supprimer une carte." };
+  }
+
+  const supabase = await creerClientServeur();
+  // On ne supprime pas une carte qu'un moniteur a dans la poche.
+  const { data, error } = await supabase
+    .from("cartes")
+    .delete()
+    .eq("id", String(formulaire.get("id") ?? ""))
+    .is("pris_par", null)
+    .select("id");
+  if (error) return { erreur: erreurDeLaBase(error) };
+  if (!data?.length) {
+    return { erreur: "Impossible : cette carte est prise. Marque-la rendue avant de la supprimer." };
+  }
+
+  rafraichir();
+  return { succes: "La carte est supprimée." };
+}
+
 // --- Fiche d'une voiture (secrétariat) ----------------------------------
 
 // Une date du formulaire, ou rien si le champ est vide.

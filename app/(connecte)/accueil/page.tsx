@@ -39,7 +39,7 @@ export default async function PageAccueil() {
       )}
 
       <Link href="/voitures" className="carte carte-lien">
-        <h2>Les voitures et les cartes</h2>
+        <h2>{cartes.length > 0 ? "Les voitures et les cartes" : "Les voitures"}</h2>
         {!secretariat && maVoiture ? (
           <div className="accueil-ma-voiture">
             <p>

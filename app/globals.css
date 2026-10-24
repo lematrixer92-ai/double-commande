@@ -761,3 +761,8 @@ a.bouton {
   border-color: var(--principale);
   color: var(--sur-principale);
 }
+
+.lien-gauche {
+  justify-self: start;
+  padding: 0;
+}

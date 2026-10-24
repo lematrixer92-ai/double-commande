@@ -1,8 +1,8 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
 import MessagePassager from "@/components/MessagePassager";
-import { actionCarte } from "./actions";
+import { actionCarte, supprimerCarte } from "./actions";
 
 type Props = {
   id: string;
@@ -16,6 +16,8 @@ type Props = {
 
 export default function LigneCarteBlanche({ id, nom, phraseEtat, libre, aMoi, secretariat }: Props) {
   const [etat, action, enCours] = useActionState(actionCarte, {});
+  const [etatSuppr, actionSuppr, supprEnCours] = useActionState(supprimerCarte, {});
+  const [confirmer, setConfirmer] = useState(false);
 
   let bouton: { valeur: string; texte: string; classe: string } | null = null;
   if (!secretariat && aMoi) bouton = { valeur: "rendre", texte: "Je rends la carte", classe: "bouton" };
@@ -49,7 +51,35 @@ export default function LigneCarteBlanche({ id, nom, phraseEtat, libre, aMoi, se
           </button>
         </form>
       )}
+      {secretariat &&
+        (!confirmer ? (
+          <button
+            className="lien-bouton lien-gauche"
+            type="button"
+            onClick={() => setConfirmer(true)}
+          >
+            Supprimer cette carte
+          </button>
+        ) : (
+          <form action={actionSuppr} className="confirmation">
+            <input type="hidden" name="id" value={id} />
+            <p className="ligne-detail">Supprimer « {nom} » et son historique ?</p>
+            <div className="boutons">
+              <button className="bouton bouton-petit bouton-danger" type="submit" disabled={supprEnCours}>
+                Oui, supprimer
+              </button>
+              <button
+                className="bouton bouton-petit bouton-secondaire"
+                type="button"
+                onClick={() => setConfirmer(false)}
+              >
+                Annuler
+              </button>
+            </div>
+          </form>
+        ))}
       <MessagePassager etat={etat} />
+      <MessagePassager etat={etatSuppr} />
     </li>
   );
 }
