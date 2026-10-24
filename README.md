@@ -22,6 +22,10 @@ Puis ouvrir http://localhost:3000
 - `public/icons/` : les icônes de l'appli
 - `lib/supabase/` : la connexion à la base de données (public, connecté, administrateur)
 - `lib/session.ts` : qui est connecté, avec quel rôle
+- `lib/flotte.ts` : charger les voitures et les cartes, dates et états
+- `app/(connecte)/voitures/` : les voitures et les cartes blanches (prendre, rendre, plein, lavage, problème, fiches)
+- `components/Plaque.tsx` : la plaque d'immatriculation française
+- `components/EnDirect.tsx` : mises à jour en direct (Supabase Realtime)
 - `proxy.ts` : garde la session et renvoie vers la connexion si besoin
 - `app/connexion`, `app/bienvenue`, `app/(connecte)/` : connexion, lien d'invitation, pages réservées
 - `supabase/migrations/` : la base de données (tables, règles, sécurité)
