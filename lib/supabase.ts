@@ -9,7 +9,10 @@ import { createClient } from "@supabase/supabase-js";
   la sécurité est assurée par les règles de la base (RLS).
 */
 const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const cle = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
+// (l'ancienne clé « anon » marche aussi)
+const cle =
+  process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ??
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
 export const supabaseConfigure = Boolean(url && cle);
 
