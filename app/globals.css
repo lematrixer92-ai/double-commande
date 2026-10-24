@@ -621,3 +621,143 @@ a.bouton {
   gap: 12px;
   flex-wrap: wrap;
 }
+
+/* ------------------------------------------------------------------
+   Étape 5 : vue secrétariat (À faire, fiche, entretiens, historique)
+   ------------------------------------------------------------------ */
+
+.carte-alerte {
+  border-color: var(--accent);
+}
+
+/* La liste « À faire » */
+.a-faire-urgent { border-left: 6px solid var(--erreur); }
+.a-faire-bientot { border-left: 6px solid var(--accent); }
+.a-faire-courant { border-left: 6px solid var(--bordure); }
+
+.a-faire-groupe .aide {
+  margin-bottom: 4px;
+}
+
+.tache {
+  color: var(--texte);
+  text-decoration: none;
+  gap: 4px;
+  min-height: var(--hauteur-bouton);
+}
+
+.tache .etiquette {
+  justify-self: start;
+}
+
+.tache-voiture {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.carte .tache .ligne-detail {
+  color: var(--texte-secondaire);
+}
+
+.etiquette-tache-indisponible { background: var(--erreur); border-color: var(--erreur); color: var(--blanc); }
+.etiquette-tache-a_verifier,
+.etiquette-tache-plein { background: var(--accent); border-color: var(--accent); color: var(--sur-accent); }
+.etiquette-tache-controle_technique,
+.etiquette-tache-assurance,
+.etiquette-tache-entretien { border-color: var(--accent); }
+
+/* Les dates de la fiche */
+.date {
+  padding-left: 12px;
+  border-left: 4px solid var(--bordure);
+}
+
+.date-bientot { border-left-color: var(--accent); }
+.date-depassee { border-left-color: var(--erreur); }
+.carte .date-depassee .ligne-detail { color: var(--erreur); font-weight: 700; }
+.carte .date-bientot .ligne-detail { color: var(--texte); font-weight: 700; }
+
+.espace-haut {
+  margin-top: 12px;
+}
+
+/* Bloc repliable « Modifier la fiche » */
+.replie summary {
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* L'historique */
+.historique {
+  display: grid;
+  gap: 16px;
+}
+
+.historique-jour {
+  margin: 0;
+  font-size: 0.95rem;
+  color: var(--texte-secondaire);
+}
+
+.historique .lignes {
+  margin-top: 4px;
+}
+
+.historique-ligne {
+  gap: 2px;
+}
+
+.historique-ligne .ligne-nom {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0 6px;
+}
+
+.historique-ligne .ligne-nom a {
+  color: var(--texte);
+}
+
+.historique-immat {
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--texte-secondaire);
+}
+
+.carte .historique-details {
+  font-style: italic;
+}
+
+/* Les filtres de l'historique */
+.filtres {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.filtre {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 14px;
+  border-radius: 999px;
+  border: 2px solid var(--bordure);
+  background: var(--surface);
+  color: var(--texte);
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-decoration: none;
+}
+
+.filtre-actif {
+  background: var(--principale);
+  border-color: var(--principale);
+  color: var(--sur-principale);
+}

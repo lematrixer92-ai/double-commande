@@ -7,7 +7,7 @@ import {
   depuisQuand,
   etatLavage,
   etatVoiture,
-  type Voiture,
+  phraseEtat,
 } from "@/lib/flotte";
 import { exigerPersonne } from "@/lib/session";
 import FicheVoiture from "./FicheVoiture";
@@ -21,13 +21,6 @@ export default async function PageVoitures() {
   const { voitures, cartes, prenoms } = await chargerFlotte();
 
   const prenom = (id: string | null) => (id === moi.id ? "toi" : prenoms.get(id ?? "") ?? "quelqu'un");
-
-  function phraseEtat(v: Voiture) {
-    if (v.indisponible) return v.raison_indisponible ?? "";
-    if (v.pris_par) return `avec ${prenom(v.pris_par)} ${depuisQuand(v.pris_depuis)}`;
-    if (v.a_verifier) return "un problème a été signalé";
-    return "";
-  }
 
   // Ma voiture en premier, puis les autres dans l'ordre.
   const triees = [...voitures].sort(
@@ -93,7 +86,7 @@ export default async function PageVoitures() {
               immatriculation={v.immatriculation}
               boite={v.boite}
               etat={etatVoiture(v)}
-              phraseEtat={phraseEtat(v)}
+              phraseEtat={phraseEtat(v, prenom)}
               probleme={v.probleme}
               pleinAFaire={v.plein_a_faire}
               lavage={etatLavage(v.dernier_lavage)}
