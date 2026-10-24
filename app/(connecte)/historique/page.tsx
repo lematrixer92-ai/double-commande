@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import EnDirect from "@/components/EnDirect";
 import ListeHistorique from "@/components/ListeHistorique";
+import PageLarge from "@/components/PageLarge";
 import { chargerHistorique, FILTRES, type NomFiltre } from "@/lib/historique";
 import { exigerSecretariat } from "@/lib/session";
 
@@ -35,6 +36,7 @@ export default async function PageHistorique({
   return (
     <>
       <EnDirect tables={["evenements"]} />
+      <PageLarge taille="moyenne" />
 
       <div className="titre-page">
         <h1>Historique</h1>

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import EnDirect from "@/components/EnDirect";
+import PageLarge from "@/components/PageLarge";
 import Plaque from "@/components/Plaque";
 import { chargerAFaire, GROUPES, type Groupe } from "@/lib/a-faire";
 import { exigerSecretariat } from "@/lib/session";
@@ -15,6 +16,7 @@ export default async function PageAFaire() {
   return (
     <>
       <EnDirect tables={["voitures"]} />
+      <PageLarge />
 
       <div className="titre-page">
         <h1>À faire</h1>
@@ -29,36 +31,38 @@ export default async function PageAFaire() {
           <p>Aucune voiture à vérifier, aucune date proche, plein et lavage à jour.</p>
         </section>
       ) : (
-        (Object.keys(GROUPES) as Groupe[]).map(
-          (groupe) =>
-            groupes[groupe].length > 0 && (
-              <section key={groupe} className={`carte a-faire-groupe a-faire-${groupe}`}>
-                <h2>
-                  {GROUPES[groupe].titre} ({groupes[groupe].length})
-                </h2>
-                <p className="aide">{GROUPES[groupe].aide}</p>
-                <ul className="lignes">
-                  {groupes[groupe].map((t) => (
-                    <li key={t.cle}>
-                      <Link href={`/voitures/${t.voitureId}`} className="ligne tache">
-                        <span className={`etiquette etiquette-tache-${t.type}`}>{t.titre}</span>
-                        <span className="tache-voiture">
-                          <span className="ligne-nom">{t.modele}</span>
-                          <Plaque numero={t.immatriculation} />
-                        </span>
-                        <span className="ligne-detail">{t.detail}</span>
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </section>
-            ),
-        )
+        <div className="colonnes">
+          {(Object.keys(GROUPES) as Groupe[]).map(
+            (groupe) =>
+              groupes[groupe].length > 0 && (
+                <section key={groupe} className={`carte a-faire-groupe a-faire-${groupe}`}>
+                  <h2>
+                    {GROUPES[groupe].titre} ({groupes[groupe].length})
+                  </h2>
+                  <p className="aide">{GROUPES[groupe].aide}</p>
+                  <ul className="lignes">
+                    {groupes[groupe].map((t) => (
+                      <li key={t.cle}>
+                        <Link href={`/voitures/${t.voitureId}`} className="ligne tache">
+                          <span className={`etiquette etiquette-tache-${t.type}`}>{t.titre}</span>
+                          <span className="tache-voiture">
+                            <span className="ligne-nom">{t.modele}</span>
+                            <Plaque numero={t.immatriculation} />
+                          </span>
+                          <span className="ligne-detail">{t.detail}</span>
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </section>
+              ),
+          )}
+        </div>
       )}
 
       <p className="aide">
-        Les dates apparaissent ici 30 jours avant l&apos;échéance, et le lavage 11 jours après
-        le dernier. Touche une ligne pour ouvrir la fiche de la voiture.
+        Les dates apparaissent ici 30 jours avant l&apos;échéance, et le lavage 11 jours après le
+        dernier. Touche une ligne pour ouvrir la fiche de la voiture.
       </p>
     </>
   );

@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import EnDirect from "@/components/EnDirect";
 import ListeHistorique from "@/components/ListeHistorique";
+import PageLarge from "@/components/PageLarge";
 import {
   aujourdhui,
   chargerFlotte,
@@ -52,7 +53,8 @@ export default async function PageFicheVoiture({ params }: { params: Promise<{ i
   const voiture = voitures.find((v) => v.id === id);
   if (!voiture) notFound();
 
-  const prenom = (p: string | null) => (p === moi.id ? "toi" : prenoms.get(p ?? "") ?? "quelqu'un");
+  const prenom = (p: string | null) =>
+    p === moi.id ? "toi" : (prenoms.get(p ?? "") ?? "quelqu'un");
   const jour = aujourdhui();
   const lavage = etatLavage(voiture.dernier_lavage);
   const listeEntretiens = (entretiens.data ?? []) as Entretien[];
@@ -66,6 +68,7 @@ export default async function PageFicheVoiture({ params }: { params: Promise<{ i
   return (
     <>
       <EnDirect tables={["voitures", "evenements"]} />
+      <PageLarge />
 
       <div className="titre-page">
         <h1>{voiture.modele}</h1>
@@ -74,79 +77,86 @@ export default async function PageFicheVoiture({ params }: { params: Promise<{ i
         </Link>
       </div>
 
-      <ul className="voitures">
-        <FicheVoiture
-          id={voiture.id}
-          modele={voiture.modele}
-          immatriculation={voiture.immatriculation}
-          boite={voiture.boite}
-          etat={etatVoiture(voiture)}
-          phraseEtat={phraseEtat(voiture, prenom)}
-          probleme={voiture.probleme}
-          pleinAFaire={voiture.plein_a_faire}
-          lavage={lavage}
-          laveeAujourdhui={voiture.dernier_lavage === jour}
-          aMoi={false}
-          secretariat
-          surSaFiche
-        />
-      </ul>
-
-      <section className="carte">
-        <h2>Les dates</h2>
-        <ul className="lignes">
-          {dates.map((d) => (
-            <li key={d.nom} className={`ligne date date-${d.niveau}`}>
-              <p className="ligne-nom">{d.nom}</p>
-              <p className="ligne-detail">
-                {d.niveau === "vide" ? "Pas encore renseignée : ajoute-la dans « Modifier la fiche »." : d.texte}
-              </p>
-            </li>
-          ))}
-          <li className={`ligne date ${lavage.aFaire ? "date-bientot" : "date-ok"}`}>
-            <p className="ligne-nom">Lavage (tous les 11 jours)</p>
-            <p className="ligne-detail">{lavage.texte}</p>
-          </li>
-        </ul>
-      </section>
-
-      <section className="carte">
-        <h2>Entretiens</h2>
-        <FormulaireEntretien voitureId={voiture.id} aujourdhui={jour} />
-        {listeEntretiens.length === 0 ? (
-          <p className="aide espace-haut">Aucun entretien noté pour l&apos;instant.</p>
-        ) : (
-          <ul className="lignes">
-            {listeEntretiens.map((e) => (
-              <li key={e.id} className="ligne">
-                <p className="ligne-nom">
-                  {dateCourte(e.date_entretien)} · {e.travaux}
-                </p>
-                <p className="ligne-detail">
-                  {[e.garage, e.prix !== null ? euros.format(e.prix) : null]
-                    .filter(Boolean)
-                    .join(" · ") || "Garage et prix non notés"}
-                </p>
-                {e.prochain_entretien && (
-                  <p className="ligne-detail">
-                    Prochain prévu le {dateCourte(e.prochain_entretien)}
-                  </p>
-                )}
-              </li>
-            ))}
+      <div className="colonnes colonnes-2">
+        <div className="colonne">
+          <ul className="voitures">
+            <FicheVoiture
+              id={voiture.id}
+              modele={voiture.modele}
+              immatriculation={voiture.immatriculation}
+              boite={voiture.boite}
+              etat={etatVoiture(voiture)}
+              phraseEtat={phraseEtat(voiture, prenom)}
+              probleme={voiture.probleme}
+              pleinAFaire={voiture.plein_a_faire}
+              lavage={lavage}
+              laveeAujourdhui={voiture.dernier_lavage === jour}
+              aMoi={false}
+              secretariat
+              surSaFiche
+            />
           </ul>
-        )}
-      </section>
 
-      <section className="carte">
-        <h2>Historique de la voiture</h2>
-        <ListeHistorique evenements={historique.evenements} avecVoiture={false} />
-        {historique.encore && (
-          <Link href="/historique" className="lien-bouton">
-            Voir tout l&apos;historique
-          </Link>
-        )}
-      </section>
+          <section className="carte">
+            <h2>Les dates</h2>
+            <ul className="lignes">
+              {dates.map((d) => (
+                <li key={d.nom} className={`ligne date date-${d.niveau}`}>
+                  <p className="ligne-nom">{d.nom}</p>
+                  <p className="ligne-detail">
+                    {d.niveau === "vide"
+                      ? "Pas encore renseignée : ajoute-la dans « Modifier la fiche »."
+                      : d.texte}
+                  </p>
+                </li>
+              ))}
+              <li className={`ligne date ${lavage.aFaire ? "date-bientot" : "date-ok"}`}>
+                <p className="ligne-nom">Lavage (tous les 11 jours)</p>
+                <p className="ligne-detail">{lavage.texte}</p>
+              </li>
+            </ul>
+          </section>
+        </div>
+        <div className="colonne">
+          <section className="carte">
+            <h2>Entretiens</h2>
+            <FormulaireEntretien voitureId={voiture.id} aujourdhui={jour} />
+            {listeEntretiens.length === 0 ? (
+              <p className="aide espace-haut">Aucun entretien noté pour l&apos;instant.</p>
+            ) : (
+              <ul className="lignes">
+                {listeEntretiens.map((e) => (
+                  <li key={e.id} className="ligne">
+                    <p className="ligne-nom">
+                      {dateCourte(e.date_entretien)} · {e.travaux}
+                    </p>
+                    <p className="ligne-detail">
+                      {[e.garage, e.prix !== null ? euros.format(e.prix) : null]
+                        .filter(Boolean)
+                        .join(" · ") || "Garage et prix non notés"}
+                    </p>
+                    {e.prochain_entretien && (
+                      <p className="ligne-detail">
+                        Prochain prévu le {dateCourte(e.prochain_entretien)}
+                      </p>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </section>
+
+          <section className="carte">
+            <h2>Historique de la voiture</h2>
+            <ListeHistorique evenements={historique.evenements} avecVoiture={false} />
+            {historique.encore && (
+              <Link href="/historique" className="lien-bouton">
+                Voir tout l&apos;historique
+              </Link>
+            )}
+          </section>
+        </div>
+      </div>
 
       <details className="carte replie">
         <summary>Modifier la fiche</summary>

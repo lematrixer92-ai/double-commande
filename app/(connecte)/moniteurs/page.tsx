@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import PageLarge from "@/components/PageLarge";
 import { exigerSecretariat } from "@/lib/session";
 import { cleSecreteReglee, creerClientAdmin } from "@/lib/supabase/admin";
 import { creerClientServeur } from "@/lib/supabase/serveur";
@@ -31,6 +32,7 @@ export default async function PageMoniteurs() {
 
   return (
     <>
+      <PageLarge taille="moyenne" />
       <div className="titre-page">
         <h1>Les moniteurs</h1>
       </div>

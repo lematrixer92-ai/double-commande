@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import EnDirect from "@/components/EnDirect";
+import PageLarge from "@/components/PageLarge";
 import {
   aujourdhui,
   chargerFlotte,
@@ -65,6 +66,7 @@ export default async function PageVoitures() {
   return (
     <>
       <EnDirect tables={["voitures", "cartes"]} />
+      <PageLarge />
 
       <div className="titre-page">
         <h1>Les voitures</h1>

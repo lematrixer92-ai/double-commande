@@ -766,3 +766,47 @@ a.bouton {
   justify-self: start;
   padding: 0;
 }
+
+/* ------------------------------------------------------------------
+   Sur ordinateur : le secrétariat y travaille surtout, les pages
+   marquées <PageLarge /> s'élargissent. Sur téléphone, rien ne change.
+   ------------------------------------------------------------------ */
+
+.tuiles,
+.colonnes,
+.colonne {
+  display: grid;
+  gap: 24px;
+  align-items: start;
+}
+
+@media (min-width: 900px) {
+  .page-connectee:has(.page-large),
+  body:has(.page-large) .entete {
+    max-width: 1200px;
+  }
+
+  .page-connectee:has(.page-moyenne),
+  body:has(.page-moyenne) .entete {
+    max-width: 820px;
+  }
+
+  .page-connectee:has(.page-large) > .bouton {
+    max-width: 360px;
+  }
+
+  .tuiles {
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    align-items: stretch;
+  }
+
+  .page-connectee:has(.page-large) .voitures,
+  .colonnes {
+    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+    align-items: start;
+  }
+
+  .colonnes-2 {
+    grid-template-columns: 1fr 1fr;
+  }
+}
