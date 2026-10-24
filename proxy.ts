@@ -7,7 +7,8 @@ import { NextResponse, type NextRequest } from "next/server";
   2. renvoie vers la page de connexion si on n'est pas connecté
      et qu'on demande une page réservée.
 */
-const PAGES_LIBRES = ["/", "/connexion", "/bienvenue"];
+// (/api/rappels : le rappel quotidien de Vercel, protégé par CRON_SECRET)
+const PAGES_LIBRES = ["/", "/connexion", "/bienvenue", "/api/rappels"];
 
 export async function proxy(request: NextRequest) {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -50,8 +51,8 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  // Toutes les pages, sauf les fichiers (images, icônes, manifeste...)
+  // Toutes les pages, sauf les fichiers (images, icônes, manifeste, service worker...)
   matcher: [
-    "/((?!_next/static|_next/image|icons/|favicon.ico|icon.svg|apple-icon.png|manifest.webmanifest|.*\\.(?:svg|png|jpg|jpeg|webp|ico)$).*)",
+    "/((?!_next/static|_next/image|icons/|favicon.ico|icon.svg|apple-icon.png|manifest.webmanifest|sw.js|.*\\.(?:svg|png|jpg|jpeg|webp|ico)$).*)",
   ],
 };

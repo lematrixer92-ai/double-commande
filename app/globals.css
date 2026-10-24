@@ -1086,3 +1086,39 @@ a.bouton {
     display: none;
   }
 }
+
+/* ------------------------------------------------------------------
+   Étape 7 : installer l'appli et les notifications
+   ------------------------------------------------------------------ */
+
+.message-info {
+  color: var(--texte);
+  border: 2px solid var(--bordure);
+  font-weight: 400;
+}
+
+.etapes {
+  margin: 0;
+  padding-left: 1.3em;
+  display: grid;
+  gap: 6px;
+}
+
+.generateur,
+.variable {
+  display: grid;
+  gap: 10px;
+}
+
+.variable {
+  padding-top: 10px;
+  border-top: 1px solid var(--bordure);
+}
+
+.variable-nom {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  word-break: break-all;
+}

@@ -15,6 +15,7 @@ import {
   type Message,
 } from "@/lib/messages";
 import { creerClientNavigateur } from "@/lib/supabase/navigateur";
+import { notifierNouveauMessage } from "../notifications/actions";
 
 /*
   Une conversation du mini chat, en direct :
@@ -141,6 +142,8 @@ export default function Conversation({
     }
     setTexte("");
     fusionner([data as Message]);
+    // Notification à l'autre côté (s'il a activé les notifications).
+    notifierNouveauMessage((data as Message).id).catch(() => {});
     router.refresh();
   }
 
