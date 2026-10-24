@@ -28,3 +28,16 @@ export type EtatFormulaire = {
   lien?: string;
   prenom?: string;
 };
+
+// Les refus de la base (« Impossible : cette voiture est déjà prise par
+// Karim... ») sont déjà écrits en français : on les affiche tels quels.
+export function erreurDeLaBase(erreur: { code?: string; message?: string }): string {
+  if (erreur.code === "P0001" && erreur.message) return erreur.message;
+  if (erreur.code === "23505")
+    return "Impossible : une voiture avec cette immatriculation existe déjà.";
+  if (erreur.code === "23514")
+    return "Impossible : une information n'est pas valide. Vérifie le modèle et l'immatriculation.";
+  if (erreur.code === "42501")
+    return "Impossible : tu n'as pas le droit de faire ça.";
+  return traduireErreur(erreur.message);
+}
