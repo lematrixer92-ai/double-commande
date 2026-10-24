@@ -182,3 +182,238 @@ body {
   font-size: 0.85rem;
   color: var(--texte-secondaire);
 }
+
+/* ------------------------------------------------------------------
+   Étape 3 : connexion, formulaires, en-tête, liste des moniteurs
+   ------------------------------------------------------------------ */
+
+a.bouton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+}
+
+.bouton-secondaire {
+  background: var(--surface);
+  color: var(--texte);
+  border: 2px solid var(--bordure);
+}
+
+.bouton-petit {
+  width: auto;
+  min-height: 44px;
+  padding: 0 16px;
+  font-size: 0.95rem;
+}
+
+.bouton-danger {
+  background: var(--erreur);
+  color: var(--blanc);
+}
+
+.bouton-danger-leger {
+  background: transparent;
+  color: var(--erreur);
+  border: 2px solid var(--erreur);
+}
+
+.lien-bouton {
+  border: none;
+  background: none;
+  font: inherit;
+  font-size: 0.9rem;
+  color: var(--texte-secondaire);
+  text-decoration: underline;
+  cursor: pointer;
+  min-height: 44px;
+  padding: 0 4px;
+}
+
+.formulaire {
+  display: grid;
+  gap: 16px;
+  margin-top: 16px;
+  width: 100%;
+}
+
+.champ {
+  display: grid;
+  gap: 6px;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.champ input {
+  min-height: var(--hauteur-bouton);
+  padding: 0 14px;
+  border: 2px solid var(--bordure);
+  border-radius: 12px;
+  background: var(--fond);
+  color: var(--texte);
+  font: inherit;
+  font-size: 1.05rem; /* 16px minimum : évite le zoom automatique sur iPhone */
+  font-weight: 400;
+}
+
+.champ input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.message {
+  margin: 0;
+  padding: 12px 14px;
+  border-radius: 12px;
+  font-weight: 600;
+}
+
+/* Refus : toujours en rouge */
+.message-erreur {
+  color: var(--erreur);
+  border: 2px solid var(--erreur);
+}
+
+.message-succes {
+  color: var(--texte);
+  border: 2px solid var(--accent);
+}
+
+.aide {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--texte-secondaire);
+}
+
+.entete {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 10px 20px;
+  background: var(--fond);
+  border-bottom: 1px solid var(--bordure);
+}
+
+.entete-marque {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  color: var(--texte);
+  text-decoration: none;
+}
+
+.entete-ecole {
+  font-weight: 800;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.page-connectee {
+  padding-top: 24px;
+  align-items: stretch;
+  text-align: left;
+}
+
+.titre-page {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.titre-page h1 {
+  margin: 0;
+  font-size: 1.6rem;
+  font-weight: 800;
+}
+
+.badge {
+  margin: 0;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  border: 2px solid var(--bordure);
+  color: var(--texte-secondaire);
+}
+
+.badge-secretariat {
+  border-color: var(--accent);
+  color: var(--texte);
+}
+
+.carte-lien {
+  display: block;
+  color: var(--texte);
+  text-decoration: none;
+  border-left: 6px solid var(--accent);
+}
+
+.lignes {
+  list-style: none;
+  margin: 12px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 12px;
+}
+
+.ligne {
+  display: grid;
+  gap: 10px;
+  padding-top: 12px;
+  border-top: 1px solid var(--bordure);
+}
+
+.ligne-nom {
+  margin: 0;
+  font-weight: 700;
+}
+
+.carte .ligne-detail {
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.boutons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.confirmation {
+  display: grid;
+  gap: 10px;
+}
+
+.carte .confirmation p {
+  color: var(--texte);
+  font-weight: 600;
+}
+
+.partage {
+  display: grid;
+  gap: 10px;
+}
+
+.partage .boutons .bouton {
+  flex: 1 1 140px;
+}
+
+.partage-lien {
+  margin: 0;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: var(--fond);
+  border: 1px dashed var(--bordure);
+  font-size: 0.8rem;
+  word-break: break-all;
+  color: var(--texte-secondaire);
+}
