@@ -20,6 +20,9 @@ Puis ouvrir http://localhost:3000
 - `app/page.tsx` : la page d'accueil
 - `components/Logo.tsx` : le logo
 - `public/icons/` : les icônes de l'appli
+- `lib/supabase.ts` : la connexion à la base de données
+- `supabase/migrations/` : la base de données (tables, règles, sécurité)
+- `supabase/seed.sql` : les premières données (La Défense Permis, 2 cartes)
 
 ## Sécurité
 

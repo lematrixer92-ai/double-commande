@@ -1,4 +1,8 @@
+import EtatBase from "@/components/EtatBase";
 import Logo from "@/components/Logo";
+
+// La page est recalculée à chaque visite pour que le voyant soit à jour.
+export const dynamic = "force-dynamic";
 
 export default function Accueil() {
   return (
@@ -32,7 +36,9 @@ export default function Accueil() {
         Se connecter (bientôt)
       </button>
 
-      <p className="pied">Étape 1 sur 9 : le site est en ligne.</p>
+      <EtatBase />
+
+      <p className="pied">Étape 2 sur 9 : la base de données.</p>
     </main>
   );
 }
