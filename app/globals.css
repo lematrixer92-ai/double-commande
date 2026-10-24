@@ -167,6 +167,16 @@ body {
   cursor: not-allowed;
 }
 
+.etat-base {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--texte-secondaire);
+}
+
 .pied {
   margin-top: auto;
   font-size: 0.85rem;
